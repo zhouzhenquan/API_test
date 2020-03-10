@@ -18,6 +18,7 @@ from Common.Login import log
 from Common.Colour import color
 from Common.Connect_DB import DB
 from decimal import Decimal
+from Common.handle_data import Case_Data,replace_data
 
 case_file = os.path.join(DATADIR, 'apicases.xlsx')
 
@@ -49,9 +50,9 @@ class Test_Recharge(unittest.TestCase):
         token = jsonpath.jsonpath(res, "$..token")[0]
         token_type = jsonpath.jsonpath(res, "$..token_type")[0]
         # 将提取到的token设置为类属性
-        cls.token_value = token_type + " " + token
+        Case_Data.token_value = token_type + " " + token
         # 提取用户的登录id，保存为类属性
-        cls.member_id = jsonpath.jsonpath(res, "$..id")[0]
+        Case_Data.member_id = str(jsonpath.jsonpath(res, "$..id")[0])
 
     @data(*cases)
     def test_recharge(self, case):
@@ -60,11 +61,11 @@ class Test_Recharge(unittest.TestCase):
         method = case['method']
 
         # 替换用户id
-        case["data"] = case["data"].replace("#member_id#", str(self.member_id))
+        case["data"] = replace_data(case["data"])
         data = eval(case["data"])
 
         headers = eval(conf.get('env', 'headers'))
-        headers["Authorization"] = self.token_value
+        headers["Authorization"] = getattr(Case_Data,"token_value")
 
         # 预期结果
         expected = eval(case['expected'])
