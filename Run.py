@@ -10,10 +10,13 @@ import unittest
 from Library.HTMLTestRunnerNew import HTMLTestRunner
 from Common.Path import CASEDIR, REPORTDIR
 from Common.filetime import File_time
+from Test_Case import test_Main
 
 suite = unittest.TestSuite()
 loader = unittest.TestLoader()
 suite.addTest(loader.discover(CASEDIR))
+
+# suite = unittest.defaultTestLoader.loadTestsFromModule(test_Main)
 
 file_path = os.path.join(REPORTDIR, File_time.time() + 'report.html')
 
