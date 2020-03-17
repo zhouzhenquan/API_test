@@ -11,6 +11,7 @@ from Library.HTMLTestRunnerNew import HTMLTestRunner
 from Common.Path import CASEDIR, REPORTDIR
 from Common.filetime import File_time
 from Test_Case import test_Main
+from Common.Email import send_email
 
 suite = unittest.TestSuite()
 loader = unittest.TestLoader()
@@ -25,3 +26,4 @@ runner = HTMLTestRunner(stream=open(file_path, 'wb'),
                         description="登录测试",
                         tester="周振全")
 runner.run(suite)
+send_email(file_path,"Python_24报告")
